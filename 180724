@@ -1,0 +1,29 @@
+#Open the Flight Search UI:
+SELECT f.flight_number, a.airport_name AS 'Departure airport name',
+a2.airport_name AS 'Arrival airport name'
+FROM airport a join flight f ON a.airport_id = f.departure_airport_airport_id
+JOIN airport a2 on a2.airport_id = f.destination_airport_airport_id
+WHERE f.flight_number LIKE 'ZY-8171';
+
+SELECT f.flight_id AS 'ID', f.flight_number AS 'Flight Number',
+a.airport_name AS 'From', a2.airport_name AS 'To',
+CONCAT_WS (' ', f.departure_date, f.departure_time) AS 'Departure time',
+CONCAT_WS (' ', f.arrival_date, f.arrival_time) AS 'Arrival time',
+f.flight_charge AS 'Flight Charge', a3.model As 'Aircraft',
+CONCAT_WS(' / ', (a3.number_of_seats-COUNT(passenger_id)), a3.number_of_seats)
+AS 'Available seats' FROM flight f
+JOIN airport a on f.departure_airport_airport_id = a.airport_id
+JOIN airport a2 on f.destination_airport_airport_id = a2.airport_id
+JOIN aircraft a3 on f.aircraft_aircraft_id = a3.aircraft_id
+JOIN passenger p on p.flight_flight_id = f.flight_id
+WHERE f.flight_id = 1;
+
+/*ADDENDUM:  I've corrected for the proper name to airport of Departure due to following query (to find the reason) and command (to correct the name): */
+
+SELECT f.departure_date, f.flight_number, a.airport_name AS 'Departure airport name',
+a2.airport_name AS 'Arrival airport name', a.airport_code AS 'FROM code',
+a2.airport_code AS 'To code', a.airport_id AS 'FROM ID', a2.airport_id AS "to ID"
+FROM airport a join flight f ON a.airport_id = f.departure_airport_airport_id
+JOIN airport a2 on a2.airport_id = f.destination_airport_airport_id
+WHERE f.flight_number LIKE 'ZY-8171';
+UPDATE airport SET airport_name = 'Brighton Early' WHERE airport_id = 2;
